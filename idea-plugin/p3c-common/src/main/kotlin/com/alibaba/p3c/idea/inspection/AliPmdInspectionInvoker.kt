@@ -46,7 +46,7 @@ class AliPmdInspectionInvoker(
         private val manager: InspectionManager,
         private val rule: Rule
 ) {
-    val logger = Logger.getInstance(javaClass)
+    private val logger = Logger.getInstance(javaClass)
 
     private var violations: List<RuleViolation> = emptyList()
 
@@ -55,7 +55,7 @@ class AliPmdInspectionInvoker(
         val processor = AliPmdProcessor(rule)
         val start = System.currentTimeMillis()
         violations = processor.processFile(psiFile)
-        logger.info("elapsed ${System.currentTimeMillis() - start}ms to" +
+        logger.debug("elapsed ${System.currentTimeMillis() - start}ms to" +
                 " to apply rule ${rule.name} for file ${psiFile.virtualFile.canonicalPath}")
     }
 

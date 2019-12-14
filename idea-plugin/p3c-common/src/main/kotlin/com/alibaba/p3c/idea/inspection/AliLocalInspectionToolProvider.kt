@@ -48,7 +48,7 @@ import javax.annotation.Generated
  */
 class AliLocalInspectionToolProvider : InspectionToolProvider {
 
-    override fun getInspectionClasses(): Array<Class<*>> {
+    override fun getInspectionClasses(): Array<Class<out LocalInspectionTool>> {
         return CLASS_LIST.toTypedArray()
     }
 
@@ -68,13 +68,12 @@ class AliLocalInspectionToolProvider : InspectionToolProvider {
         val ruleInfoMap: MutableMap<String, RuleInfo> = Maps.newHashMap<String, RuleInfo>()
         private val LOGGER = Logger.getInstance(AliLocalInspectionToolProvider::class.java)
         val ruleNames: MutableList<String> = Lists.newArrayList<String>()!!
-        private val CLASS_LIST = Lists.newArrayList<Class<*>>()
+        private val CLASS_LIST = Lists.newArrayList<Class<LocalInspectionTool>>()
         private val nativeInspectionToolClass = arrayListOf<Class<out LocalInspectionTool>>(
                 AliMissingOverrideAnnotationInspection::class.java,
                 AliAccessStaticViaInstanceInspection::class.java,
                 AliDeprecationInspection::class.java,
                 MapOrSetKeyShouldOverrideHashCodeEqualsInspection::class.java,
-                AliAccessToNonThreadSafeStaticFieldFromInstanceInspection::class.java,
                 AliArrayNamingShouldHaveBracketInspection::class.java,
                 AliControlFlowStatementWithoutBracesInspection::class.java,
                 AliEqualsAvoidNullInspection::class.java,
@@ -131,7 +130,7 @@ class AliLocalInspectionToolProvider : InspectionToolProvider {
                 val toolClass = pool.get(LocalInspectionTool::class.java.name)
                 val newField = CtField(toolClass, "forJavassist", cc)
                 cc.addField(newField, CtField.Initializer.byNew(itClass))
-                CLASS_LIST.add(cc.toClass())
+                CLASS_LIST.add(cc.toClass() as Class<LocalInspectionTool>)
             }
         }
 
@@ -151,7 +150,7 @@ class AliLocalInspectionToolProvider : InspectionToolProvider {
                     val value = "\"" + ruleInfo.rule.name + "\""
                     val newField = CtField.make("private String ruleName = $value;", cc)
                     cc.addField(newField, value)
-                    CLASS_LIST.add(cc.toClass())
+                    CLASS_LIST.add(cc.toClass() as Class<LocalInspectionTool>)
                 }
 
             } catch (e: NotFoundException) {

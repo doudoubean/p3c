@@ -37,7 +37,7 @@ import javax.swing.JComponent
  * @date 2016/12/08
  */
 class AliDeprecationInspection : DeprecationInspection, AliBaseInspection {
-    val messageKey = "com.alibaba.p3c.idea.inspection.standalone.AliDeprecationInspection"
+    private val messageKey = "com.alibaba.p3c.idea.inspection.standalone.AliDeprecationInspection"
 
     constructor()
     /**
@@ -46,7 +46,7 @@ class AliDeprecationInspection : DeprecationInspection, AliBaseInspection {
     constructor(any: Any?) : this()
 
     init {
-        IGNORE_INSIDE_DEPRECATED = false
+        IGNORE_INSIDE_DEPRECATED = true
         IGNORE_ABSTRACT_DEPRECATED_OVERRIDES = false
         IGNORE_IMPORT_STATEMENTS = false
         IGNORE_METHODS_OF_DEPRECATED = false
@@ -88,13 +88,13 @@ class AliDeprecationInspection : DeprecationInspection, AliBaseInspection {
             holder.manager, holder.file, onTheFly) {
 
         override fun registerProblem(psiElement: PsiElement,
-                @Nls(capitalization = Nls.Capitalization.Sentence) descriptionTemplate: String,
+                @Nls descriptionTemplate: String,
                 fixes: Array<LocalQuickFix>?) {
             holder.registerProblem(psiElement, getMessage(descriptionTemplate), *(fixes ?: emptyArray()))
         }
 
         override fun registerProblem(psiElement: PsiElement,
-                @Nls(capitalization = Nls.Capitalization.Sentence) descriptionTemplate: String,
+                @Nls descriptionTemplate: String,
                 highlightType: ProblemHighlightType, fixes: Array<LocalQuickFix>?) {
             holder.registerProblem(psiElement, getMessage(descriptionTemplate), highlightType, *(fixes ?: emptyArray()))
         }
